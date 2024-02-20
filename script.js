@@ -66,6 +66,7 @@ function obtenerComida(nombre) {
         pedidoComida.push({ item: "Arroz con pollo", precio: 2000, cantidad: cantidadArroz, tipo: "Comida" });
       }
       resolve({ tipo: "Comida", pedido: pedidoComida });
+      formComida.style.display = "none";
     });
     document.body.appendChild(formComida);
   });
@@ -118,8 +119,10 @@ function obtenerBebida(nombre, edad) {
         pedidoBebida.push({ item: "Mate", precio: 20, cantidad: cantidadMate, tipo: "Bebida" });
       }
       resolve({ tipo: "Bebida", pedido: pedidoBebida });
+      formBebida.style.display = "none";
     });
     document.body.appendChild(formBebida);
+    
   });
 }
 
