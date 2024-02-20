@@ -232,25 +232,41 @@ botonPedido.addEventListener("click", async function () {
   botonPedido.style.display = "none";
   imagenPrincipal.style.display = "none";
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
-  const personas = prompt("¿Cuantas personas son? 👨‍👩‍👦‍👦 ");
+  
+  const comensalesInput = document.createElement('input');
+  comensalesInput.type = 'number';
+  comensalesInput.placeholder = '¿Cuántas personas son?';
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.innerText = 'Enviar';
+  const form = document.createElement('form');
+  form.appendChild(comensalesInput);
+  form.appendChild(submitButton);
+  document.body.appendChild(form);
+  form.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const personas = parseInt(comensalesInput.value);
+    form.style.display = "none";
 
-  for (let i = 0; i < personas; i++) {
-    const { nombre, edad } = await obtenerInformacionCliente(i);
+    for (let i = 0; i < personas; i++) {
+      const { nombre, edad } = await obtenerInformacionCliente(i);
 
-    const pedidoComida = await obtenerComida(nombre);
-    const pedidoBebida = await obtenerBebida(nombre, edad);
+      const pedidoComida = await obtenerComida(nombre);
+      const pedidoBebida = await obtenerBebida(nombre, edad);
 
-    imprimirSubtotal({ nombre, ...pedidoComida });
-    imprimirSubtotal({ nombre, ...pedidoBebida });
+      imprimirSubtotal({ nombre, ...pedidoComida });
+      imprimirSubtotal({ nombre, ...pedidoBebida });
 
-    pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
-  }
-  pedidos.forEach((pedido, index) => {
-    console.log(`Detalles del pedido ${index + 1}:`);
-    pedido.forEach((item, itemIndex) => {
-      console.log(`  ${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio}`);
+      pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
+    }
+    pedidos.forEach((pedido, index) => {
+      console.log(`Detalles del pedido ${index + 1}:`);
+      pedido.forEach((item, itemIndex) => {
+        console.log(`  ${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio}`);
+      });
     });
-  });
 
-  imprimirMensajeFinal();
+    imprimirMensajeFinal();
+    document.body.removeChild(form);
+  });
 });
