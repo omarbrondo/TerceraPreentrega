@@ -70,18 +70,18 @@ function crearFormularioComida(comida) {
     const img = document.createElement('img');
     img.src = item.imagen;
     img.alt = item.nombre;
-    img.width = 100; // Ajusta el ancho de la imagen según sea necesario
-    label.appendChild(document.createElement('br')); // Salto de línea antes de la imagen
+    img.width = 100; 
+    label.appendChild(document.createElement('br')); 
     label.appendChild(img);
     container.appendChild(label);
-    container.appendChild(document.createElement('br')); // Salto de línea después de la imagen
+    container.appendChild(document.createElement('br')); 
     const input = document.createElement('input');
     input.type = 'number';
     input.name = item.nombre;
     input.placeholder = `Cantidad de ${item.nombre}`;
     container.appendChild(input);
     formComida.appendChild(container);
-    formComida.appendChild(document.createElement('br')); // Salto de línea entre cada elemento del formulario
+    formComida.appendChild(document.createElement('br')); 
   });
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
@@ -93,79 +93,69 @@ function crearFormularioComida(comida) {
 
 function obtenerBebida(nombre, edad) {
   return new Promise((resolve, reject) => {
-    const formBebida = document.createElement('form');
-
-    // Agua
-    const imgAgua = document.createElement('img');
-    imgAgua.src = "img/agua.jpg"; // Ruta de la imagen del agua
-    formBebida.appendChild(imgAgua);
-    const aguaInput = document.createElement('input');
-    aguaInput.type = 'number';
-    aguaInput.placeholder = 'Cantidad de Vasos de Agua';
-    formBebida.appendChild(aguaInput);
-
-    // Gaseosa
-    const imgGaseosa = document.createElement('img');
-    imgGaseosa.src = "img/gaseosa.jpg"; // Ruta de la imagen de la gaseosa
-    formBebida.appendChild(imgGaseosa);
-    const gaseosaInput = document.createElement('input');
-    gaseosaInput.type = 'number';
-    gaseosaInput.placeholder = 'Cantidad de Gaseosas';
-    formBebida.appendChild(gaseosaInput);
-
-    // Cerveza
-    const imgCerveza = document.createElement('img');
-    imgCerveza.src = "img/cerveza.jpg"; // Ruta de la imagen de la cerveza
-    formBebida.appendChild(imgCerveza);
-    const cervezaInput = document.createElement('input');
-    cervezaInput.type = 'number';
-    cervezaInput.placeholder = 'Cantidad de Cervezas';
-    formBebida.appendChild(cervezaInput);
-
-    // Mate
-    const imgMate = document.createElement('img');
-    imgMate.src = "img/mate.jpg"; // Ruta de la imagen del mate
-    formBebida.appendChild(imgMate);
-    const mateInput = document.createElement('input');
-    mateInput.type = 'number';
-    mateInput.placeholder = 'Cantidad de Mate';
-    formBebida.appendChild(mateInput);
-
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.innerText = 'Enviar';
-    formBebida.appendChild(submitButton);
-
-    formBebida.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const cantidadAgua = parseInt(aguaInput.value);
-      const cantidadGaseosa = parseInt(gaseosaInput.value);
-      const cantidadCerveza = parseInt(cervezaInput.value);
-      const cantidadMate = parseInt(mateInput.value);
-      const pedidoBebida = [];
-      if (cantidadAgua > 0) {
-        pedidoBebida.push({ item: "Vaso de agua", precio: 0, cantidad: cantidadAgua, tipo: "Bebida" });
-      }
-      if (cantidadGaseosa > 0) {
-        pedidoBebida.push({ item: "Gaseosa", precio: 500, cantidad: cantidadGaseosa, tipo: "Bebida" });
-      }
-      if (cantidadCerveza > 0) {
-        if (edad < 18) {
-          alert("Lo siento, no puedes elegir cerveza porque eres menor de 18 años.");
-          return; // Terminar la ejecución de la función
-        }
-        pedidoBebida.push({ item: "Cerveza", precio: 2000, cantidad: cantidadCerveza, tipo: "Bebida" });
-      }
-      if (cantidadMate > 0) {
-        pedidoBebida.push({ item: "Mate", precio: 20, cantidad: cantidadMate, tipo: "Bebida" });
-      }
-      resolve({ tipo: "Bebida", pedido: pedidoBebida });
-      formBebida.style.display = "none";
-    });
-
-    document.body.appendChild(formBebida);
+    fetch('datos.json')
+      .then(response => response.json())
+      .then(data => {
+        const bebidas = data.bebida.map(item => ({
+          nombre: item.nombre,
+          precio: item.precio,
+          imagen: item.imagen
+        }));
+        const formBebida = crearFormularioBebida(bebidas);
+        formBebida.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const cantidadCerveza = parseInt(formBebida.elements['Cerveza'].value);
+          if (edad < 18 && cantidadCerveza > 0) {
+            alert("Lo siento, no puedes elegir cerveza porque eres menor de 18 años.");
+            return;
+          }
+          const pedidoBebida = [];
+          bebidas.forEach(bebida => {
+            const cantidad = parseInt(formBebida.elements[bebida.nombre].value);
+            if (cantidad > 0) {
+              pedidoBebida.push({ item: bebida.nombre, precio: bebida.precio, cantidad: cantidad, tipo: 'Bebida' });
+            }
+          });
+          resolve({ tipo: 'Bebida', pedido: pedidoBebida });
+          formBebida.style.display = 'none';
+        });
+      })
+      .catch(error => {
+        console.error('Error al cargar el archivo JSON:', error);
+      });
   });
 }
+
+function crearFormularioBebida(bebidas) {
+  const formBebida = document.createElement('form');
+  bebidas.forEach(bebida => {
+    const container = document.createElement('div');
+    const label = document.createElement('label');
+    label.innerText = `${bebida.nombre}: `;
+    const img = document.createElement('img');
+    img.src = bebida.imagen;
+    img.alt = bebida.nombre;
+    img.width = 100; 
+    label.appendChild(document.createElement('br')); 
+    label.appendChild(img);
+    container.appendChild(label);
+    container.appendChild(document.createElement('br')); 
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.name = bebida.nombre;
+    input.placeholder = `Cantidad de ${bebida.nombre}`;
+    container.appendChild(input);
+    formBebida.appendChild(container);
+    formBebida.appendChild(document.createElement('br')); 
+  });
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.innerText = 'Enviar';
+  formBebida.appendChild(submitButton);
+  document.body.appendChild(formBebida);
+  return formBebida;
+}
+
 
 function imprimirSubtotal({ nombre, tipo, pedido }) {
   let subtotal = 0;
@@ -180,10 +170,10 @@ function imprimirSubtotal({ nombre, tipo, pedido }) {
 }
 
 function imprimirMensajeFinal() {
-  imagenPrincipal.src = "img/OIG (1).jpg"; // Establece la fuente de la imagen
-  imagenPrincipal.style.display = "block"; // Asegúrate de que la imagen esté visible
-  botonPedido.style.display = "none"; // Oculta el botón de pedido
-  document.querySelector("h1").innerText = "Su pedido está preparándose!"; // Actualiza el texto del encabezado
+  imagenPrincipal.src = "img/OIG (1).jpg"; 
+  imagenPrincipal.style.display = "block"; 
+  botonPedido.style.display = "none"; 
+  document.querySelector("h1").innerText = "Su pedido está preparándose!"; 
 
   const totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
 
