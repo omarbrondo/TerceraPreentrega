@@ -30,84 +30,112 @@ function obtenerInformacionCliente(i) {
   });
 }
 
-// Función para ocultar elementos
-function ocultarElementos() {
-  document.querySelector("img").style.display = "none"; // Ocultar la imagen principal
-  document.querySelector("footer").style.display = "none"; // Ocultar el footer
-}
-
-// Define objetos para representar los elementos del menú
-const menuComida = {
-  1: { item: "Hamburguesa con queso", precio: 4000 },
-  2: { item: "Ensalada", precio: 3000 },
-  3: { item: "Arroz con pollo", precio: 2000 },
-};
-
-const menuBebida = {
-  1: { item: "Vaso de agua", precio: 0 },
-  2: { item: "Gaseosa", precio: 500 },
-  3: { item: "Cerveza", precio: 2000 },
-  4: { item: "Mate", precio: 20 },
-};
-
-// Función de orden superior para calcular el subtotal de una categoría
-const calcularSubtotalCategoria = (pedido, categoria) =>
-  pedido.filter(item => item.tipo === categoria).reduce((total, item) => total + item.precio, 0);
-
 function obtenerComida(nombre) {
-  const pedidoComida = [];
-  let comida;
-
-  do {
-    comida = prompt(
-      `¿Qué comerá hoy ${nombre.toUpperCase()}? \n Seleccione Comida \n 1) Hamburguesa con queso 🍔💲4000  \n 2) Ensalada 🥗💲3000  \n 3) Arroz con pollo 🍚💲2000  \n 4) Listo! ✅`
-    );
-
-    if (parseInt(comida) !== 4) {
-      const { item, precio } = menuComida[parseInt(comida)];
-      pedidoComida.push({ item, precio, tipo: "Comida" });
-      console.log(`${nombre.toUpperCase()} Eligió para comer ${item}`);
-    }
-  } while (parseInt(comida) !== 4);
-
-  return { tipo: "Comida", pedido: pedidoComida };
+  return new Promise((resolve, reject) => {
+    const formComida = document.createElement('form');
+    const hamburguesasInput = document.createElement('input');
+    hamburguesasInput.type = 'number';
+    hamburguesasInput.placeholder = 'Cantidad de Hamburguesas';
+    const ensaladasInput = document.createElement('input');
+    ensaladasInput.type = 'number';
+    ensaladasInput.placeholder = 'Cantidad de Ensaladas';
+    const arrozInput = document.createElement('input');
+    arrozInput.type = 'number';
+    arrozInput.placeholder = 'Cantidad de Arroz con Pollo';
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.innerText = 'Enviar';
+    formComida.appendChild(hamburguesasInput);
+    formComida.appendChild(ensaladasInput);
+    formComida.appendChild(arrozInput);
+    formComida.appendChild(submitButton);
+    formComida.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const cantidadHamburguesas = parseInt(hamburguesasInput.value);
+      const cantidadEnsaladas = parseInt(ensaladasInput.value);
+      const cantidadArroz = parseInt(arrozInput.value);
+      const pedidoComida = [];
+      if (cantidadHamburguesas > 0) {
+        pedidoComida.push({ item: "Hamburguesa con queso", precio: 4000, cantidad: cantidadHamburguesas, tipo: "Comida" });
+      }
+      if (cantidadEnsaladas > 0) {
+        pedidoComida.push({ item: "Ensalada", precio: 3000, cantidad: cantidadEnsaladas, tipo: "Comida" });
+      }
+      if (cantidadArroz > 0) {
+        pedidoComida.push({ item: "Arroz con pollo", precio: 2000, cantidad: cantidadArroz, tipo: "Comida" });
+      }
+      resolve({ tipo: "Comida", pedido: pedidoComida });
+    });
+    document.body.appendChild(formComida);
+  });
 }
 
 function obtenerBebida(nombre, edad) {
-  const pedidoBebida = [];
-  let bebida;
-
-  do {
-    bebida = prompt(
-      `¿Que beberá ${nombre.toUpperCase()}? \n 1) Vaso de agua 🥛💲0  \n 2) Gaseosa 🥤💲500  \n 3) Cerveza 🍺💲2000  \n 4) Mate 🧉💲20  \n 5) Listo!✅ \n`
-    );
-
-    if (parseInt(bebida) !== 5) {
-      const { item, precio } = menuBebida[parseInt(bebida)];
-      const puedeTomarCerveza = edad >= 18 ? true : false; // Operador ternario para determinar si puede tomar cerveza
-      if (!puedeTomarCerveza && parseInt(bebida) === 3) {
-        alert(`🔞 ${nombre.toUpperCase()} Es menor de edad, no puede tomar cerveza 🔞`);
-      } else {
-        pedidoBebida.push({ item, precio, tipo: "Bebida" });
-        console.log(`${nombre.toUpperCase()} Eligió para beber ${item}`);
+  return new Promise((resolve, reject) => {
+    const formBebida = document.createElement('form');
+    const aguaInput = document.createElement('input');
+    aguaInput.type = 'number';
+    aguaInput.placeholder = 'Cantidad de Vasos de Agua';
+    const gaseosaInput = document.createElement('input');
+    gaseosaInput.type = 'number';
+    gaseosaInput.placeholder = 'Cantidad de Gaseosas';
+    const cervezaInput = document.createElement('input');
+    cervezaInput.type = 'number';
+    cervezaInput.placeholder = 'Cantidad de Cervezas';
+    const mateInput = document.createElement('input');
+    mateInput.type = 'number';
+    mateInput.placeholder = 'Cantidad de Mate';
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.innerText = 'Enviar';
+    formBebida.appendChild(aguaInput);
+    formBebida.appendChild(gaseosaInput);
+    formBebida.appendChild(cervezaInput);
+    formBebida.appendChild(mateInput);
+    formBebida.appendChild(submitButton);
+    formBebida.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const cantidadAgua = parseInt(aguaInput.value);
+      const cantidadGaseosa = parseInt(gaseosaInput.value);
+      const cantidadCerveza = parseInt(cervezaInput.value);
+      const cantidadMate = parseInt(mateInput.value);
+      const pedidoBebida = [];
+      if (cantidadAgua > 0) {
+        pedidoBebida.push({ item: "Vaso de agua", precio: 0, cantidad: cantidadAgua, tipo: "Bebida" });
       }
-    }
-  } while (parseInt(bebida) !== 5);
-
-  return { tipo: "Bebida", pedido: pedidoBebida };
+      if (cantidadGaseosa > 0) {
+        pedidoBebida.push({ item: "Gaseosa", precio: 500, cantidad: cantidadGaseosa, tipo: "Bebida" });
+      }
+      if (cantidadCerveza > 0) {
+        pedidoBebida.push({ item: "Cerveza", precio: 2000, cantidad: cantidadCerveza, tipo: "Bebida" });
+      }
+      if (cantidadMate > 0) {
+        pedidoBebida.push({ item: "Mate", precio: 20, cantidad: cantidadMate, tipo: "Bebida" });
+      }
+      resolve({ tipo: "Bebida", pedido: pedidoBebida });
+    });
+    document.body.appendChild(formBebida);
+  });
 }
 
 function imprimirSubtotal({ nombre, tipo, pedido }) {
-  const subtotal = calcularSubtotalCategoria(pedido, tipo);
+  let subtotal = 0;
+
+  if (Array.isArray(pedido)) {
+    subtotal = pedido.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+  } else {
+    subtotal = pedido.precio * pedido.cantidad;
+  }
+
   console.log(`💰Subtotal de ${tipo} para ${nombre.toUpperCase()}: ${subtotal}`);
 }
 
 function imprimirMensajeFinal() {
   document.querySelector("img").src = "img/OIG (1).jpg";
-  document.querySelector("h1").innerText = "Su pedido está preparandose!";
+  document.querySelector("h1").innerText = "Su pedido está preparándose!";
   botonPedido.hidden = true;
 
-  const totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + item.precio, 0), 0);
+  const totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
 
   const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150); 
 
@@ -128,17 +156,15 @@ function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Ocultar elementos al hacer clic en el botón
 botonPedido.addEventListener("click", async function () {
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
-  ocultarElementos(); // Ocultar elementos principales
   const personas = prompt("¿Cuantas personas son? 👨‍👩‍👦‍👦 ");
 
   for (let i = 0; i < personas; i++) {
     const { nombre, edad } = await obtenerInformacionCliente(i);
 
-    const pedidoComida = obtenerComida(nombre);
-    const pedidoBebida = obtenerBebida(nombre, edad);
+    const pedidoComida = await obtenerComida(nombre);
+    const pedidoBebida = await obtenerBebida(nombre, edad);
 
     imprimirSubtotal({ nombre, ...pedidoComida });
     imprimirSubtotal({ nombre, ...pedidoBebida });
