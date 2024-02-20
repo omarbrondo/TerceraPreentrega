@@ -4,10 +4,36 @@ let pedidos = []; // Array para almacenar la información de los pedidos
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
 function obtenerInformacionCliente(i) {
-  const nombre = prompt(`Nombre de la persona ${parseInt(i) + 1}`);
-  console.log(`Menu para ${nombre.toUpperCase()}`);
-  const edad = prompt(`¿Edad de ${nombre.toUpperCase()}?`);
-  return { nombre, edad };
+  return new Promise((resolve, reject) => {
+    const nombreInput = document.createElement('input');
+    nombreInput.type = 'text';
+    nombreInput.placeholder = `Nombre de la persona ${parseInt(i) + 1}`;
+    const edadInput = document.createElement('input');
+    edadInput.type = 'number';
+    edadInput.placeholder = `Edad de la persona ${parseInt(i) + 1}`;
+    const submitButton = document.createElement('button');
+    submitButton.type = 'submit';
+    submitButton.innerText = 'Enviar';
+    const form = document.createElement('form');
+    form.appendChild(nombreInput);
+    form.appendChild(edadInput);
+    form.appendChild(submitButton);
+    document.body.appendChild(form);
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const nombre = nombreInput.value;
+      const edad = parseInt(edadInput.value);
+      document.body.removeChild(form);
+      console.log(`Menu para ${nombre.toUpperCase()}`);
+      resolve({ nombre, edad });
+    });
+  });
+}
+
+// Función para ocultar elementos
+function ocultarElementos() {
+  document.querySelector("img").style.display = "none"; // Ocultar la imagen principal
+  document.querySelector("footer").style.display = "none"; // Ocultar el footer
 }
 
 // Define objetos para representar los elementos del menú
@@ -102,12 +128,14 @@ function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-botonPedido.addEventListener("click", function () {
+// Ocultar elementos al hacer clic en el botón
+botonPedido.addEventListener("click", async function () {
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
+  ocultarElementos(); // Ocultar elementos principales
   const personas = prompt("¿Cuantas personas son? 👨‍👩‍👦‍👦 ");
 
   for (let i = 0; i < personas; i++) {
-    const { nombre, edad } = obtenerInformacionCliente(i);
+    const { nombre, edad } = await obtenerInformacionCliente(i);
 
     const pedidoComida = obtenerComida(nombre);
     const pedidoBebida = obtenerBebida(nombre, edad);

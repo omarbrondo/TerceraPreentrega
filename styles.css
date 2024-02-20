@@ -50,3 +50,24 @@ button:hover {
 h3 {
     color: red;
   }
+
+  form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra del formulario */
+    width: 300px; /* Ancho del formulario */
+    margin: 0 auto; /* Centrar el formulario horizontalmente */
+    text-align: center; /* Centrar contenido del formulario */
+    display: flex; /* Usar flexbox */
+    flex-direction: column; /* Apilar elementos verticalmente */
+    justify-content: center; /* Centrar verticalmente los elementos */
+    align-items: center; /* Centrar horizontalmente los elementos */
+  }
+  
+  /* Estilos para los elementos del formulario */
+  input,
+  button {
+    margin: 10px 0; /* Espacio entre los elementos */
+    display: block; /* Mostrar los elementos en bloques */
+  }
