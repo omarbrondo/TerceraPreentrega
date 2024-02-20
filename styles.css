@@ -9,9 +9,9 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-image: url('img/back.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
-    background-position: center; /* Centra la imagen en el fondo */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
 }
 
 
@@ -20,11 +20,11 @@ body {
     text-align: center;
 }
 h1 {
-    background-color: #f2f2f260; /* Color de fondo del recuadro */
-    padding: 10px; /* Relleno interno del recuadro */
+    background-color: #f2f2f260;
+    padding: 10px; 
     text-align: center;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra del recuadro */
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
 img {
@@ -44,7 +44,7 @@ button {
 }
 
 button:hover {
-    background-color: #2980b9; /* Cambio de color al pasar el mouse sobre el botón */
+    background-color: #2980b9; 
 }
 
 h3 {
@@ -55,19 +55,19 @@ h3 {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra del formulario */
-    width: 300px; /* Ancho del formulario */
-    margin: 0 auto; /* Centrar el formulario horizontalmente */
-    text-align: center; /* Centrar contenido del formulario */
-    display: flex; /* Usar flexbox */
-    flex-direction: column; /* Apilar elementos verticalmente */
-    justify-content: center; /* Centrar verticalmente los elementos */
-    align-items: center; /* Centrar horizontalmente los elementos */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px; 
+    margin: 0 auto;
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center; 
   }
   
-  /* Estilos para los elementos del formulario */
+
   input,
   button {
-    margin: 10px 0; /* Espacio entre los elementos */
-    display: block; /* Mostrar los elementos en bloques */
+    margin: 10px 0;
+    display: block; 
   }

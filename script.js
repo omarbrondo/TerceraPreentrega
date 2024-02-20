@@ -193,8 +193,8 @@ function imprimirMensajeFinal() {
 
   const imprimirFacturaButton = document.createElement("button");
   imprimirFacturaButton.innerText = "Imprimir Factura";
-  imprimirFacturaButton.style.display = "block"; // Para ocupar toda la anchura
-  imprimirFacturaButton.style.margin = "auto"; // Para centrar horizontalmente
+  imprimirFacturaButton.style.display = "block"; 
+  imprimirFacturaButton.style.margin = "auto"; 
   imprimirFacturaButton.addEventListener("click", imprimirFactura);
   pedidoRecuadro.appendChild(imprimirFacturaButton);
 
