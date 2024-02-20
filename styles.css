@@ -1,0 +1,52 @@
+
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('img/back.jpg');
+    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir todo el fondo */
+    background-position: center; /* Centra la imagen en el fondo */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+}
+
+
+
+.footer-text {
+    text-align: center;
+}
+h1 {
+    background-color: #f2f2f260; /* Color de fondo del recuadro */
+    padding: 10px; /* Relleno interno del recuadro */
+    text-align: center;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra del recuadro */
+}
+
+img {
+    max-width: 30%; 
+    height: auto;
+    margin-top: 20px; 
+}
+
+button {
+    background-color: #90db34; 
+    color: #fff; 
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px; 
+}
+
+button:hover {
+    background-color: #2980b9; /* Cambio de color al pasar el mouse sobre el botón */
+}
+
+h3 {
+    color: red;
+  }
