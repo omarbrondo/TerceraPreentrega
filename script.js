@@ -1,6 +1,7 @@
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
-let pedidos = []; // Array para almacenar la información de los pedidos
+let pedidos = [];
+let totalGeneral = 0; // Variable para almacenar el total general
 
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
@@ -156,7 +157,6 @@ function crearFormularioBebida(bebidas) {
   return formBebida;
 }
 
-
 function imprimirSubtotal({ nombre, tipo, pedido }) {
   let subtotal = 0;
 
@@ -175,7 +175,7 @@ function imprimirMensajeFinal() {
   botonPedido.style.display = "none"; 
   document.querySelector("h1").innerText = "Su pedido está preparándose!"; 
 
-  const totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
+  totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0); // Calculamos el total general
 
   const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150);
 
@@ -190,6 +190,24 @@ function imprimirMensajeFinal() {
   h3Pedido.innerText = `Su pedido es el número: ${numeroPedidoAleatorio}`;
   pedidoRecuadro.appendChild(h3Pedido);
   document.body.appendChild(pedidoRecuadro);
+
+  const imprimirFacturaButton = document.createElement("button");
+  imprimirFacturaButton.innerText = "Imprimir Factura";
+  imprimirFacturaButton.addEventListener("click", imprimirFactura);
+  document.body.appendChild(imprimirFacturaButton);
+}
+
+function imprimirFactura() {
+  const facturaWindow = window.open("", "Factura", "width=600,height=400");
+  facturaWindow.document.write("<h1>Factura</h1>");
+  facturaWindow.document.write("<h2>Detalles del Pedido</h2>");
+  pedidos.forEach((pedido, index) => {
+    facturaWindow.document.write(`<h3>Detalles del pedido ${index + 1}:</h3>`);
+    pedido.forEach((item, itemIndex) => {
+      facturaWindow.document.write(`<p>${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio * item.cantidad}</p>`);
+    });
+  });
+  facturaWindow.document.write(`<h3>Total a Pagar: ${totalGeneral}</h3>`);
 }
 
 function generarNumeroAleatorio(min, max) {
@@ -213,12 +231,6 @@ botonPedido.addEventListener("click", async function () {
 
     pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
   }
-  pedidos.forEach((pedido, index) => {
-    console.log(`Detalles del pedido ${index + 1}:`);
-    pedido.forEach((item, itemIndex) => {
-      console.log(`  ${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio}`);
-    });
-  });
 
   imprimirMensajeFinal();
 });
