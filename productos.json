@@ -1,0 +1,42 @@
+{
+    "comidas": [
+      {
+        "nombre": "Hamburguesa con queso",
+        "precio": 4000,
+        "imagen": "img/paty.jpg"
+      },
+      {
+        "nombre": "Ensalada",
+        "precio": 3000,
+        "imagen": "img/ensalada.jpg"
+      },
+      {
+        "nombre": "Arroz con pollo",
+        "precio": 2000,
+        "imagen": "img/arrozpollo.jpg"
+      }
+    ],
+    "bebidas": [
+      {
+        "nombre": "Agua",
+        "precio": 0,
+        "imagen": "img/agua.jpg"
+      },
+      {
+        "nombre": "Gaseosa",
+        "precio": 500,
+        "imagen": "img/gaseosa.jpg"
+      },
+      {
+        "nombre": "Cerveza",
+        "precio": 2000,
+        "imagen": "img/cerveza.jpg"
+      },
+      {
+        "nombre": "Mate",
+        "precio": 20,
+        "imagen": "img/mate.jpg"
+      }
+    ]
+  }
+  

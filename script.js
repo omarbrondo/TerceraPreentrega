@@ -34,22 +34,39 @@ function obtenerInformacionCliente(i) {
 function obtenerComida(nombre) {
   return new Promise((resolve, reject) => {
     const formComida = document.createElement('form');
+
+    const imgHamburguesa = document.createElement('img');
+    imgHamburguesa.src = "img/paty.jpg"; // Ruta de la imagen de la hamburguesa
+    formComida.appendChild(imgHamburguesa);
+
     const hamburguesasInput = document.createElement('input');
     hamburguesasInput.type = 'number';
     hamburguesasInput.placeholder = 'Cantidad de Hamburguesas';
+    formComida.appendChild(hamburguesasInput);
+
+    const imgEnsalada = document.createElement('img');
+    imgEnsalada.src = "img/arrozpollo.jpg";
+    formComida.appendChild(imgEnsalada);
+
     const ensaladasInput = document.createElement('input');
     ensaladasInput.type = 'number';
     ensaladasInput.placeholder = 'Cantidad de Ensaladas';
+    formComida.appendChild(ensaladasInput);
+
+    const imgArrozPollo = document.createElement('img');
+    imgArrozPollo.src = "img/arrozpollo.jpg";
+    formComida.appendChild(imgArrozPollo);
+
     const arrozInput = document.createElement('input');
     arrozInput.type = 'number';
     arrozInput.placeholder = 'Cantidad de Arroz con Pollo';
+    formComida.appendChild(arrozInput);
+
     const submitButton = document.createElement('button');
     submitButton.type = 'submit';
     submitButton.innerText = 'Enviar';
-    formComida.appendChild(hamburguesasInput);
-    formComida.appendChild(ensaladasInput);
-    formComida.appendChild(arrozInput);
     formComida.appendChild(submitButton);
+
     formComida.addEventListener('submit', function(event) {
       event.preventDefault();
       const cantidadHamburguesas = parseInt(hamburguesasInput.value);
@@ -68,6 +85,7 @@ function obtenerComida(nombre) {
       resolve({ tipo: "Comida", pedido: pedidoComida });
       formComida.style.display = "none";
     });
+
     document.body.appendChild(formComida);
   });
 }
@@ -122,7 +140,6 @@ function obtenerBebida(nombre, edad) {
       formBebida.style.display = "none";
     });
     document.body.appendChild(formBebida);
-    
   });
 }
 
@@ -139,13 +156,14 @@ function imprimirSubtotal({ nombre, tipo, pedido }) {
 }
 
 function imprimirMensajeFinal() {
-  document.querySelector("img").src = "img/OIG (1).jpg";
-  document.querySelector("h1").innerText = "Su pedido está preparándose!";
-  botonPedido.hidden = true;
+  imagenPrincipal.src = "img/OIG (1).jpg"; // Establece la fuente de la imagen
+  imagenPrincipal.style.display = "block"; // Asegúrate de que la imagen esté visible
+  botonPedido.style.display = "none"; // Oculta el botón de pedido
+  document.querySelector("h1").innerText = "Su pedido está preparándose!"; // Actualiza el texto del encabezado
 
   const totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
 
-  const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150); 
+  const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150);
 
   console.log("EL TOTAL A COBRAR ES 💵 💲" + totalGeneral);
   console.log(`Su pedido es el número: ${numeroPedidoAleatorio}`);
@@ -165,7 +183,7 @@ function generarNumeroAleatorio(min, max) {
 }
 
 botonPedido.addEventListener("click", async function () {
-  botonPedido.style.display = "none";  
+  botonPedido.style.display = "none";
   imagenPrincipal.style.display = "none";
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
   const personas = prompt("¿Cuantas personas son? 👨‍👩‍👦‍👦 ");
