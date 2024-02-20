@@ -1,7 +1,8 @@
+let totalGeneral; // Variable para almacenar el total general del pedido
+
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
-let pedidos = [];
-let totalGeneral = 0; // Variable para almacenar el total general
+let pedidos = []; // Array para almacenar la información de los pedidos
 
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
@@ -175,7 +176,7 @@ function imprimirMensajeFinal() {
   botonPedido.style.display = "none"; 
   document.querySelector("h1").innerText = "Su pedido está preparándose!"; 
 
-  totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0); // Calculamos el total general
+  totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
 
   const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150);
 
@@ -189,29 +190,42 @@ function imprimirMensajeFinal() {
   const h3Pedido = document.createElement("h3");
   h3Pedido.innerText = `Su pedido es el número: ${numeroPedidoAleatorio}`;
   pedidoRecuadro.appendChild(h3Pedido);
-  document.body.appendChild(pedidoRecuadro);
 
   const imprimirFacturaButton = document.createElement("button");
   imprimirFacturaButton.innerText = "Imprimir Factura";
+  imprimirFacturaButton.style.display = "block"; // Para ocupar toda la anchura
+  imprimirFacturaButton.style.margin = "auto"; // Para centrar horizontalmente
   imprimirFacturaButton.addEventListener("click", imprimirFactura);
-  document.body.appendChild(imprimirFacturaButton);
-}
+  pedidoRecuadro.appendChild(imprimirFacturaButton);
 
-function imprimirFactura() {
-  const facturaWindow = window.open("", "Factura", "width=600,height=400");
-  facturaWindow.document.write("<h1>Factura</h1>");
-  facturaWindow.document.write("<h2>Detalles del Pedido</h2>");
-  pedidos.forEach((pedido, index) => {
-    facturaWindow.document.write(`<h3>Detalles del pedido ${index + 1}:</h3>`);
-    pedido.forEach((item, itemIndex) => {
-      facturaWindow.document.write(`<p>${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio * item.cantidad}</p>`);
-    });
-  });
-  facturaWindow.document.write(`<h3>Total a Pagar: ${totalGeneral}</h3>`);
+  document.body.appendChild(pedidoRecuadro);
 }
 
 function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function imprimirFactura() {
+  const facturaWindow = window.open('', '_blank');
+  facturaWindow.document.write('<html><head><title>Factura</title></head><body>');
+  facturaWindow.document.write('<h1 style="text-align: center; font-weight: bold;">FACTURA</h1>');
+  facturaWindow.document.write('<p style="text-align: center;">Restaurante Ratatouille</p>');
+  facturaWindow.document.write('<hr>');
+  facturaWindow.document.write('<h2>Detalles del pedido:</h2>');
+  facturaWindow.document.write('<ul>');
+
+  pedidos.forEach((pedido, index) => {
+    facturaWindow.document.write(`<li><b>Detalle del pedido ${index + 1}:</b></li>`);
+    pedido.forEach((item, itemIndex) => {
+      facturaWindow.document.write(`<li>${item.tipo} ${itemIndex + 1}: ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
+    });
+  });
+
+  facturaWindow.document.write('</ul>');
+  facturaWindow.document.write(`<p style="text-align: center; font-weight: bold;">Total a Pagar:$ ${totalGeneral}</p>`);
+  facturaWindow.document.write('<p style="text-align: center;">Gracias por su compra!!</p>');
+  facturaWindow.document.write('</body></html>');
+  facturaWindow.document.close();
 }
 
 botonPedido.addEventListener("click", async function () {
@@ -231,6 +245,12 @@ botonPedido.addEventListener("click", async function () {
 
     pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
   }
+  pedidos.forEach((pedido, index) => {
+    console.log(`Detalles del pedido ${index + 1}:`);
+    pedido.forEach((item, itemIndex) => {
+      console.log(`  ${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio}`);
+    });
+  });
 
   imprimirMensajeFinal();
 });
