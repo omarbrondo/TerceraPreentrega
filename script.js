@@ -1,4 +1,5 @@
 let botonPedido = document.querySelector("button");
+let imagenPrincipal = document.querySelector("img");
 let pedidos = []; // Array para almacenar la información de los pedidos
 
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
@@ -157,6 +158,8 @@ function generarNumeroAleatorio(min, max) {
 }
 
 botonPedido.addEventListener("click", async function () {
+  botonPedido.style.display = "none";  
+  imagenPrincipal.style.display = "none";
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
   const personas = prompt("¿Cuantas personas son? 👨‍👩‍👦‍👦 ");
 
