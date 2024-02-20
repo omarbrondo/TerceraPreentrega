@@ -108,6 +108,10 @@ function obtenerBebida(nombre, edad) {
         pedidoBebida.push({ item: "Gaseosa", precio: 500, cantidad: cantidadGaseosa, tipo: "Bebida" });
       }
       if (cantidadCerveza > 0) {
+        if (edad < 18) {
+          alert("Lo siento, no puedes elegir cerveza porque eres menor de 18 años.");
+          return; // Terminar la ejecución de la función
+        }
         pedidoBebida.push({ item: "Cerveza", precio: 2000, cantidad: cantidadCerveza, tipo: "Bebida" });
       }
       if (cantidadMate > 0) {
