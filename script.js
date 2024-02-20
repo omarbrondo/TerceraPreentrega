@@ -33,86 +33,109 @@ function obtenerInformacionCliente(i) {
 
 function obtenerComida(nombre) {
   return new Promise((resolve, reject) => {
-    const formComida = document.createElement('form');
-
-    const imgHamburguesa = document.createElement('img');
-    imgHamburguesa.src = "img/paty.jpg"; // Ruta de la imagen de la hamburguesa
-    formComida.appendChild(imgHamburguesa);
-
-    const hamburguesasInput = document.createElement('input');
-    hamburguesasInput.type = 'number';
-    hamburguesasInput.placeholder = 'Cantidad de Hamburguesas';
-    formComida.appendChild(hamburguesasInput);
-
-    const imgEnsalada = document.createElement('img');
-    imgEnsalada.src = "img/arrozpollo.jpg";
-    formComida.appendChild(imgEnsalada);
-
-    const ensaladasInput = document.createElement('input');
-    ensaladasInput.type = 'number';
-    ensaladasInput.placeholder = 'Cantidad de Ensaladas';
-    formComida.appendChild(ensaladasInput);
-
-    const imgArrozPollo = document.createElement('img');
-    imgArrozPollo.src = "img/arrozpollo.jpg";
-    formComida.appendChild(imgArrozPollo);
-
-    const arrozInput = document.createElement('input');
-    arrozInput.type = 'number';
-    arrozInput.placeholder = 'Cantidad de Arroz con Pollo';
-    formComida.appendChild(arrozInput);
-
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.innerText = 'Enviar';
-    formComida.appendChild(submitButton);
-
-    formComida.addEventListener('submit', function(event) {
-      event.preventDefault();
-      const cantidadHamburguesas = parseInt(hamburguesasInput.value);
-      const cantidadEnsaladas = parseInt(ensaladasInput.value);
-      const cantidadArroz = parseInt(arrozInput.value);
-      const pedidoComida = [];
-      if (cantidadHamburguesas > 0) {
-        pedidoComida.push({ item: "Hamburguesa con queso", precio: 4000, cantidad: cantidadHamburguesas, tipo: "Comida" });
-      }
-      if (cantidadEnsaladas > 0) {
-        pedidoComida.push({ item: "Ensalada", precio: 3000, cantidad: cantidadEnsaladas, tipo: "Comida" });
-      }
-      if (cantidadArroz > 0) {
-        pedidoComida.push({ item: "Arroz con pollo", precio: 2000, cantidad: cantidadArroz, tipo: "Comida" });
-      }
-      resolve({ tipo: "Comida", pedido: pedidoComida });
-      formComida.style.display = "none";
-    });
-
-    document.body.appendChild(formComida);
+    fetch('datos.json')
+      .then(response => response.json())
+      .then(data => {
+        const comida = data.comida.map(item => ({
+          nombre: item.nombre,
+          precio: item.precio,
+          imagen: item.imagen
+        }));
+        const formComida = crearFormularioComida(comida);
+        formComida.addEventListener('submit', function(event) {
+          event.preventDefault();
+          const pedidoComida = [];
+          comida.forEach(item => {
+            const cantidad = parseInt(formComida.elements[item.nombre].value);
+            if (cantidad > 0) {
+              pedidoComida.push({ item: item.nombre, precio: item.precio, cantidad: cantidad, tipo: "Comida" });
+            }
+          });
+          resolve({ tipo: "Comida", pedido: pedidoComida });
+          formComida.style.display = "none";
+        });
+      })
+      .catch(error => {
+        console.error('Error al cargar el archivo JSON:', error);
+      });
   });
+}
+
+function crearFormularioComida(comida) {
+  const formComida = document.createElement('form');
+  comida.forEach(item => {
+    const container = document.createElement('div');
+    const label = document.createElement('label');
+    label.innerText = `${item.nombre}: `;
+    const img = document.createElement('img');
+    img.src = item.imagen;
+    img.alt = item.nombre;
+    img.width = 100; // Ajusta el ancho de la imagen según sea necesario
+    label.appendChild(document.createElement('br')); // Salto de línea antes de la imagen
+    label.appendChild(img);
+    container.appendChild(label);
+    container.appendChild(document.createElement('br')); // Salto de línea después de la imagen
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.name = item.nombre;
+    input.placeholder = `Cantidad de ${item.nombre}`;
+    container.appendChild(input);
+    formComida.appendChild(container);
+    formComida.appendChild(document.createElement('br')); // Salto de línea entre cada elemento del formulario
+  });
+  const submitButton = document.createElement('button');
+  submitButton.type = 'submit';
+  submitButton.innerText = 'Enviar';
+  formComida.appendChild(submitButton);
+  document.body.appendChild(formComida);
+  return formComida;
 }
 
 function obtenerBebida(nombre, edad) {
   return new Promise((resolve, reject) => {
     const formBebida = document.createElement('form');
+
+    // Agua
+    const imgAgua = document.createElement('img');
+    imgAgua.src = "img/agua.jpg"; // Ruta de la imagen del agua
+    formBebida.appendChild(imgAgua);
     const aguaInput = document.createElement('input');
     aguaInput.type = 'number';
     aguaInput.placeholder = 'Cantidad de Vasos de Agua';
+    formBebida.appendChild(aguaInput);
+
+    // Gaseosa
+    const imgGaseosa = document.createElement('img');
+    imgGaseosa.src = "img/gaseosa.jpg"; // Ruta de la imagen de la gaseosa
+    formBebida.appendChild(imgGaseosa);
     const gaseosaInput = document.createElement('input');
     gaseosaInput.type = 'number';
     gaseosaInput.placeholder = 'Cantidad de Gaseosas';
+    formBebida.appendChild(gaseosaInput);
+
+    // Cerveza
+    const imgCerveza = document.createElement('img');
+    imgCerveza.src = "img/cerveza.jpg"; // Ruta de la imagen de la cerveza
+    formBebida.appendChild(imgCerveza);
     const cervezaInput = document.createElement('input');
     cervezaInput.type = 'number';
     cervezaInput.placeholder = 'Cantidad de Cervezas';
+    formBebida.appendChild(cervezaInput);
+
+    // Mate
+    const imgMate = document.createElement('img');
+    imgMate.src = "img/mate.jpg"; // Ruta de la imagen del mate
+    formBebida.appendChild(imgMate);
     const mateInput = document.createElement('input');
     mateInput.type = 'number';
     mateInput.placeholder = 'Cantidad de Mate';
+    formBebida.appendChild(mateInput);
+
     const submitButton = document.createElement('button');
     submitButton.type = 'submit';
     submitButton.innerText = 'Enviar';
-    formBebida.appendChild(aguaInput);
-    formBebida.appendChild(gaseosaInput);
-    formBebida.appendChild(cervezaInput);
-    formBebida.appendChild(mateInput);
     formBebida.appendChild(submitButton);
+
     formBebida.addEventListener('submit', function(event) {
       event.preventDefault();
       const cantidadAgua = parseInt(aguaInput.value);
@@ -139,6 +162,7 @@ function obtenerBebida(nombre, edad) {
       resolve({ tipo: "Bebida", pedido: pedidoBebida });
       formBebida.style.display = "none";
     });
+
     document.body.appendChild(formBebida);
   });
 }
