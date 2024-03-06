@@ -77,11 +77,15 @@ function crearFormularioComida(comida) {
     label.appendChild(img);
     container.appendChild(label);
     container.appendChild(document.createElement('br')); 
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.name = item.nombre;
-    input.placeholder = `Cantidad de ${item.nombre}`;
-    container.appendChild(input);
+    const select = document.createElement('select'); // Cambiar a elemento select
+    select.name = item.nombre;
+    for (let i = 0; i <= 10; i++) { // Agregar opciones del 0 al 10
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      select.appendChild(option);
+    }
+    container.appendChild(select);
     formComida.appendChild(container);
     formComida.appendChild(document.createElement('br')); 
   });
@@ -103,7 +107,7 @@ function obtenerBebida(nombre, edad) {
           precio: item.precio,
           imagen: item.imagen
         }));
-        const formBebida = crearFormularioBebida(bebidas);
+        const formBebida = crearFormularioBebida(bebidas, edad); // Pasar la edad al crear el formulario
         formBebida.addEventListener('submit', function(event) {
           event.preventDefault();
           const cantidadCerveza = parseInt(formBebida.elements['Cerveza'].value);
@@ -128,7 +132,7 @@ function obtenerBebida(nombre, edad) {
   });
 }
 
-function crearFormularioBebida(bebidas) {
+function crearFormularioBebida(bebidas, edad) {
   const formBebida = document.createElement('form');
   bebidas.forEach(bebida => {
     const container = document.createElement('div');
@@ -142,11 +146,18 @@ function crearFormularioBebida(bebidas) {
     label.appendChild(img);
     container.appendChild(label);
     container.appendChild(document.createElement('br')); 
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.name = bebida.nombre;
-    input.placeholder = `Cantidad de ${bebida.nombre}`;
-    container.appendChild(input);
+    const select = document.createElement('select'); // Cambiar a elemento select
+    select.name = bebida.nombre;
+    for (let i = 0; i <= 10; i++) { // Agregar opciones del 0 al 10
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = i;
+      select.appendChild(option);
+    }
+    if (bebida.nombre === "Cerveza" && edad < 18) { // Si es menor de 18 años, deshabilitar la cerveza
+      select.disabled = true;
+    }
+    container.appendChild(select);
     formBebida.appendChild(container);
     formBebida.appendChild(document.createElement('br')); 
   });
@@ -233,13 +244,16 @@ botonPedido.addEventListener("click", async function () {
   imagenPrincipal.style.display = "none";
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
   
-  const comensalesInput = document.createElement('input');
-  comensalesInput.type = 'number';
+  const comensalesInput = document.createElement('select'); // Cambiar input por select
   comensalesInput.placeholder = '¿Cuántas personas son?';
+  comensalesInput.innerHTML = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>'; // Agregar opciones
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Enviar';
   const form = document.createElement('form');
+  const comensalesLabel = document.createElement('label');
+  comensalesLabel.innerText = '¿Cuántos comensales van a ser?';
+  form.appendChild(comensalesLabel);
   form.appendChild(comensalesInput);
   form.appendChild(submitButton);
   document.body.appendChild(form);
@@ -259,6 +273,8 @@ botonPedido.addEventListener("click", async function () {
 
       pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
     }
+    localStorage.setItem('pedidos', JSON.stringify(pedidos)); // Guardar los pedidos en el localStorage
+    console.log(JSON.parse(localStorage.getItem('pedidos'))); // Mostrar los pedidos en la consola
     pedidos.forEach((pedido, index) => {
       console.log(`Detalles del pedido ${index + 1}:`);
       pedido.forEach((item, itemIndex) => {
