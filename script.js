@@ -1,3 +1,15 @@
+function Pedido(item, precio, cantidad, tipo) {
+  this.item = item;
+  this.precio = precio;
+  this.cantidad = cantidad;
+  this.tipo = tipo;
+}
+
+function Factura(pedidos, total) {
+  this.pedidos = pedidos;
+  this.total = total;
+}
+
 let totalGeneral;
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
@@ -55,7 +67,7 @@ function obtenerComida(nombre) {
           comida.forEach(item => {
             const cantidad = parseInt(formComida.elements[item.nombre].value);
             if (cantidad > 0) {
-              pedidoComida.push({ item: item.nombre, precio: item.precio, cantidad: cantidad, tipo: "Comida" });
+              pedidoComida.push(new Pedido(item.nombre, item.precio, cantidad, "Comida"));
             }
           });
           resolve({ tipo: "Comida", pedido: pedidoComida });
@@ -124,7 +136,7 @@ function obtenerBebida(nombre, mayorEdad) {
           bebidas.forEach(bebida => {
             const cantidad = parseInt(formBebida.elements[bebida.nombre].value);
             if (cantidad > 0) {
-              pedidoBebida.push({ item: bebida.nombre, precio: bebida.precio, cantidad: cantidad, tipo: 'Bebida' });
+              pedidoBebida.push(new Pedido(bebida.nombre, bebida.precio, cantidad, 'Bebida'));
             }
           });
           resolve({ tipo: 'Bebida', pedido: pedidoBebida });
@@ -216,7 +228,6 @@ function imprimirMensajeFinal() {
 
   document.body.appendChild(pedidoRecuadro);
 
-  // Guardar pedidos en el localStorage
   localStorage.setItem('pedidos', JSON.stringify(pedidos));
 }
 
