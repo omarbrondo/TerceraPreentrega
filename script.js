@@ -1,8 +1,7 @@
-let totalGeneral; // Variable para almacenar el total general del pedido
-
+let totalGeneral;
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
-let pedidos = []; // Array para almacenar la información de los pedidos
+let pedidos = [];
 
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
@@ -11,24 +10,30 @@ function obtenerInformacionCliente(i) {
     const nombreInput = document.createElement('input');
     nombreInput.type = 'text';
     nombreInput.placeholder = `Nombre de la persona ${parseInt(i) + 1}`;
-    const edadInput = document.createElement('input');
-    edadInput.type = 'number';
-    edadInput.placeholder = `Edad de la persona ${parseInt(i) + 1}`;
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.innerText = 'Enviar';
+    const mayorEdadButton = document.createElement('button');
+    mayorEdadButton.innerText = 'Soy mayor de edad';
+    const menorEdadButton = document.createElement('button');
+    menorEdadButton.innerText = 'Soy menor de edad';
     const form = document.createElement('form');
     form.appendChild(nombreInput);
-    form.appendChild(edadInput);
-    form.appendChild(submitButton);
+    form.appendChild(mayorEdadButton);
+    form.appendChild(menorEdadButton);
     document.body.appendChild(form);
-    form.addEventListener('submit', function(event) {
+
+    mayorEdadButton.addEventListener('click', function(event) {
       event.preventDefault();
       const nombre = nombreInput.value;
-      const edad = parseInt(edadInput.value);
       document.body.removeChild(form);
       console.log(`Menu para ${nombre.toUpperCase()}`);
-      resolve({ nombre, edad });
+      resolve({ nombre, mayorEdad: true });
+    });
+
+    menorEdadButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      const nombre = nombreInput.value;
+      document.body.removeChild(form);
+      console.log(`Menu para ${nombre.toUpperCase()}`);
+      resolve({ nombre, mayorEdad: false });
     });
   });
 }
@@ -77,9 +82,9 @@ function crearFormularioComida(comida) {
     label.appendChild(img);
     container.appendChild(label);
     container.appendChild(document.createElement('br')); 
-    const select = document.createElement('select'); // Cambiar a elemento select
+    const select = document.createElement('select');
     select.name = item.nombre;
-    for (let i = 0; i <= 10; i++) { // Agregar opciones del 0 al 10
+    for (let i = 0; i <= 10; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = i;
@@ -97,7 +102,7 @@ function crearFormularioComida(comida) {
   return formComida;
 }
 
-function obtenerBebida(nombre, edad) {
+function obtenerBebida(nombre, mayorEdad) {
   return new Promise((resolve, reject) => {
     fetch('datos.json')
       .then(response => response.json())
@@ -107,11 +112,11 @@ function obtenerBebida(nombre, edad) {
           precio: item.precio,
           imagen: item.imagen
         }));
-        const formBebida = crearFormularioBebida(bebidas, edad); // Pasar la edad al crear el formulario
+        const formBebida = crearFormularioBebida(bebidas, mayorEdad);
         formBebida.addEventListener('submit', function(event) {
           event.preventDefault();
           const cantidadCerveza = parseInt(formBebida.elements['Cerveza'].value);
-          if (edad < 18 && cantidadCerveza > 0) {
+          if (!mayorEdad && cantidadCerveza > 0) {
             alert("Lo siento, no puedes elegir cerveza porque eres menor de 18 años.");
             return;
           }
@@ -132,7 +137,7 @@ function obtenerBebida(nombre, edad) {
   });
 }
 
-function crearFormularioBebida(bebidas, edad) {
+function crearFormularioBebida(bebidas, mayorEdad) {
   const formBebida = document.createElement('form');
   bebidas.forEach(bebida => {
     const container = document.createElement('div');
@@ -146,15 +151,15 @@ function crearFormularioBebida(bebidas, edad) {
     label.appendChild(img);
     container.appendChild(label);
     container.appendChild(document.createElement('br')); 
-    const select = document.createElement('select'); // Cambiar a elemento select
+    const select = document.createElement('select');
     select.name = bebida.nombre;
-    for (let i = 0; i <= 10; i++) { // Agregar opciones del 0 al 10
+    for (let i = 0; i <= 10; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = i;
       select.appendChild(option);
     }
-    if (bebida.nombre === "Cerveza" && edad < 18) { // Si es menor de 18 años, deshabilitar la cerveza
+    if (!mayorEdad && bebida.nombre === "Cerveza") {
       select.disabled = true;
     }
     container.appendChild(select);
@@ -244,9 +249,9 @@ botonPedido.addEventListener("click", async function () {
   imagenPrincipal.style.display = "none";
   console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
   
-  const comensalesInput = document.createElement('select'); // Cambiar input por select
+  const comensalesInput = document.createElement('select'); 
   comensalesInput.placeholder = '¿Cuántas personas son?';
-  comensalesInput.innerHTML = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>'; // Agregar opciones
+  comensalesInput.innerHTML = '<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>'; 
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Enviar';
@@ -263,18 +268,18 @@ botonPedido.addEventListener("click", async function () {
     form.style.display = "none";
 
     for (let i = 0; i < personas; i++) {
-      const { nombre, edad } = await obtenerInformacionCliente(i);
+      const { nombre, mayorEdad } = await obtenerInformacionCliente(i);
 
       const pedidoComida = await obtenerComida(nombre);
-      const pedidoBebida = await obtenerBebida(nombre, edad);
+      const pedidoBebida = await obtenerBebida(nombre, mayorEdad);
 
       imprimirSubtotal({ nombre, ...pedidoComida });
       imprimirSubtotal({ nombre, ...pedidoBebida });
 
       pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
     }
-    localStorage.setItem('pedidos', JSON.stringify(pedidos)); // Guardar los pedidos en el localStorage
-    console.log(JSON.parse(localStorage.getItem('pedidos'))); // Mostrar los pedidos en la consola
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    console.log(JSON.parse(localStorage.getItem('pedidos')));
     pedidos.forEach((pedido, index) => {
       console.log(`Detalles del pedido ${index + 1}:`);
       pedido.forEach((item, itemIndex) => {
