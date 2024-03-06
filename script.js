@@ -215,6 +215,9 @@ function imprimirMensajeFinal() {
   pedidoRecuadro.appendChild(imprimirFacturaButton);
 
   document.body.appendChild(pedidoRecuadro);
+
+  // Guardar pedidos en el localStorage
+  localStorage.setItem('pedidos', JSON.stringify(pedidos));
 }
 
 function generarNumeroAleatorio(min, max) {
@@ -278,14 +281,6 @@ botonPedido.addEventListener("click", async function () {
 
       pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
     }
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    console.log(JSON.parse(localStorage.getItem('pedidos')));
-    pedidos.forEach((pedido, index) => {
-      console.log(`Detalles del pedido ${index + 1}:`);
-      pedido.forEach((item, itemIndex) => {
-        console.log(`  ${item.tipo} ${itemIndex + 1}: ${item.item} - Precio: ${item.precio}`);
-      });
-    });
 
     imprimirMensajeFinal();
     document.body.removeChild(form);
