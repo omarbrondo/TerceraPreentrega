@@ -25,18 +25,24 @@ function mostrarPedidosAnteriores() {
   divPedidosAnteriores.style.backgroundColor = 'green';
   divPedidosAnteriores.style.color = 'white';
   divPedidosAnteriores.style.padding = '10px';
-  divPedidosAnteriores.innerText = 'Pedidos Anteriores:';
-  divPedidosAnteriores.style.position = 'fixed'; // Hacer que el div sea fijo en la pantalla
-  divPedidosAnteriores.style.left = '10px'; // Alinear el div a la izquierda
-  divPedidosAnteriores.style.top = '50%'; // Alinear verticalmente al centro de la pantalla
-  divPedidosAnteriores.style.transform = 'translateY(-50%)'; // Ajustar la posición verticalmente
+  divPedidosAnteriores.style.position = 'absolute';
+  divPedidosAnteriores.style.left = '10px';
+  divPedidosAnteriores.style.top = '10px';
+  divPedidosAnteriores.style.maxWidth = '200px'; // Establecemos un ancho máximo
+
+  const titulo = document.createElement('h2');
+  titulo.innerText = 'Pedidos Anteriores';
+  divPedidosAnteriores.appendChild(titulo);
+
   pedidos.forEach((pedido, index) => {
     const pPedido = document.createElement('p');
     pPedido.innerText = `Pedido ${index + 1}: ${pedido.map(item => `${item.cantidad} ${item.item}`).join(', ')}`;
     divPedidosAnteriores.appendChild(pPedido);
   });
+
   document.body.insertBefore(divPedidosAnteriores, document.querySelector('footer'));
 }
+
 
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
 
