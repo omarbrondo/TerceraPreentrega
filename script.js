@@ -5,15 +5,36 @@ function Pedido(item, precio, cantidad, tipo) {
   this.tipo = tipo;
 }
 
-function Factura(pedidos, total) {
-  this.pedidos = pedidos;
-  this.total = total;
+function obtenerPedidosLocalStorage() {
+  const pedidosLocalStorage = localStorage.getItem('pedidos');
+  if (pedidosLocalStorage) {
+    return JSON.parse(pedidosLocalStorage);
+  } else {
+    return [];
+  }
 }
 
 let totalGeneral;
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
-let pedidos = [];
+let pedidos = obtenerPedidosLocalStorage(); // Obtener los pedidos almacenados en localStorage
+
+// Función para mostrar los pedidos anteriores en el div
+function mostrarPedidosAnteriores() {
+  const divPedidosAnteriores = document.createElement('div');
+  divPedidosAnteriores.style.backgroundColor = 'green';
+  divPedidosAnteriores.style.color = 'white';
+  divPedidosAnteriores.style.padding = '10px';
+  divPedidosAnteriores.innerText = 'Pedidos Anteriores:';
+  pedidos.forEach((pedido, index) => {
+    const pPedido = document.createElement('p');
+    pPedido.innerText = `Pedido ${index + 1}: ${pedido.map(item => `${item.cantidad} ${item.item}`).join(', ')}`;
+    divPedidosAnteriores.appendChild(pPedido);
+  });
+  document.body.insertBefore(divPedidosAnteriores, document.querySelector('footer'));
+}
+
+mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
 
 alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
