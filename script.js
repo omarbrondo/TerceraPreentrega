@@ -199,7 +199,7 @@ function obtenerBebida(nombre, mayorEdad) {
           event.preventDefault();
           const cantidadCerveza = parseInt(formBebida.elements['Cerveza'].value);
           if (!mayorEdad && cantidadCerveza > 0) {
-            alert("Lo siento, no puedes elegir cerveza porque eres menor de 18 años.");
+            swal("oh oh","Lo siento, no puedes elegir cerveza porque eres menor de 18 años.","info");
             return;
           }
           const pedidoBebida = [];
