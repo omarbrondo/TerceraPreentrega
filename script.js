@@ -1,9 +1,20 @@
+
+function mostrarNotificacion(mensaje) {
+  Toastify({
+    text: mensaje,
+    duration: 3000,
+    gravity: "top",
+    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    stopOnFocus: true,
+  }).showToast();
+}
 function Pedido(item, precio, cantidad, tipo) {
   this.item = item;
   this.precio = parseFloat(precio); // Convertir el precio a número
   this.cantidad = cantidad;
   this.tipo = tipo;
 }
+
 
 function obtenerPedidosLocalStorage() {
   const pedidosLocalStorage = localStorage.getItem('pedidos');
@@ -407,6 +418,21 @@ botonPedido.addEventListener("click", async function () {
 
       const pedidoComida = await obtenerComida(nombre);
       const pedidoBebida = await obtenerBebida(nombre, mayorEdad);
+
+
+      pedidoBebida.pedido.forEach(item => {
+        mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
+      });
+      mostrarNotificacion(`${nombre} ha elegido la siguiente bebida:`);
+
+      
+      pedidoComida.pedido.forEach(item => {
+        mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
+      });
+      mostrarNotificacion(`${nombre} ha elegido la siguiente comida:`);
+      
+      
+
 
       imprimirSubtotal({ nombre, ...pedidoComida });
       imprimirSubtotal({ nombre, ...pedidoBebida });
