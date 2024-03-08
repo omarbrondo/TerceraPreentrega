@@ -286,11 +286,11 @@ function imprimirFactura(totalPedidoActual) {
   facturaWindow.document.write('<h2>Detalles del pedido:</h2>');
   facturaWindow.document.write('<ul>');
 
-  pedidos.forEach((pedido, index) => {
-    facturaWindow.document.write(`<li><b>Detalle del pedido ${index + 1}:</b></li>`);
-    pedido.forEach((item, itemIndex) => {
-      facturaWindow.document.write(`<li>${item.tipo} ${itemIndex + 1}: ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
-    });
+  // Obtener el último pedido almacenado en la variable pedidos
+  const ultimoPedido = pedidos[pedidos.length - 1];
+
+  ultimoPedido.forEach((item, index) => {
+    facturaWindow.document.write(`<li>${item.tipo} ${index + 1}: ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
   });
 
   facturaWindow.document.write('</ul>');
