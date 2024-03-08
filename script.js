@@ -44,7 +44,7 @@ function mostrarPedidosAnteriores() {
 
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
 
-alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
+swal("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
@@ -63,7 +63,11 @@ function obtenerInformacionCliente(i) {
 
     mayorEdadButton.addEventListener('click', function(event) {
       event.preventDefault();
-      const nombre = nombreInput.value;
+      const nombre = nombreInput.value.trim();
+      if (nombre === '') {
+        swal("Oops...", "No seas tímido, decinos tu nombre", "warning");
+        return; // Detener el proceso si el nombre está vacío
+      }
       document.body.removeChild(form);
       console.log(`Menu para ${nombre.toUpperCase()}`);
       resolve({ nombre, mayorEdad: true });
@@ -71,7 +75,11 @@ function obtenerInformacionCliente(i) {
 
     menorEdadButton.addEventListener('click', function(event) {
       event.preventDefault();
-      const nombre = nombreInput.value;
+      const nombre = nombreInput.value.trim();
+      if (nombre === '') {
+        swal("Oops...", "No seas tímido, decinos tu nombre", "warning");
+        return; // Detener el proceso si el nombre está vacío
+      }
       document.body.removeChild(form);
       console.log(`Menu para ${nombre.toUpperCase()}`);
       resolve({ nombre, mayorEdad: false });
