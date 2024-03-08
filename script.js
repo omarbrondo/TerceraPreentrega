@@ -46,7 +46,7 @@ function mostrarPedidosAnteriores() {
 
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
 
-alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
+swal("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
@@ -92,6 +92,8 @@ function obtenerComida(nombre) {
           imagen: item.imagen
         }));
         const formComida = crearFormularioComida(comida);
+        swal("¡Oops!", "Lo siento, no puedes elegir cerveza porque eres menor de 18 años.", "warning");
+
         formComida.addEventListener('submit', function(event) {
           event.preventDefault();
           const pedidoComida = [];
