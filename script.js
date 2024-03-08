@@ -1,6 +1,6 @@
 function Pedido(item, precio, cantidad, tipo) {
   this.item = item;
-  this.precio = precio;
+  this.precio = parseFloat(precio); // Convertir el precio a número
   this.cantidad = cantidad;
   this.tipo = tipo;
 }
@@ -14,7 +14,6 @@ function obtenerPedidosLocalStorage() {
   }
 }
 
-let totalGeneral;
 let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
 let pedidos = obtenerPedidosLocalStorage(); // Obtener los pedidos almacenados en localStorage
@@ -43,10 +42,9 @@ function mostrarPedidosAnteriores() {
   document.body.insertBefore(divPedidosAnteriores, document.querySelector('footer'));
 }
 
-
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
 
-swal("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
+alert("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
@@ -88,12 +86,10 @@ function obtenerComida(nombre) {
       .then(data => {
         const comida = data.comida.map(item => ({
           nombre: item.nombre,
-          precio: item.precio,
+          precio: parseFloat(item.precio), // Convertir el precio a número
           imagen: item.imagen
         }));
         const formComida = crearFormularioComida(comida);
-        swal("¡Oops!", "Lo siento, no puedes elegir cerveza porque eres menor de 18 años.", "warning");
-
         formComida.addEventListener('submit', function(event) {
           event.preventDefault();
           const pedidoComida = [];
@@ -154,7 +150,7 @@ function obtenerBebida(nombre, mayorEdad) {
       .then(data => {
         const bebidas = data.bebida.map(item => ({
           nombre: item.nombre,
-          precio: item.precio,
+          precio: parseFloat(item.precio), // Convertir el precio a número
           imagen: item.imagen
         }));
         const formBebida = crearFormularioBebida(bebidas, mayorEdad);
@@ -237,11 +233,16 @@ function imprimirMensajeFinal() {
   botonPedido.style.display = "none"; 
   document.querySelector("h1").innerText = "Su pedido está preparándose!"; 
 
-  totalGeneral = pedidos.reduce((total, pedido) => total + pedido.reduce((subtotal, item) => subtotal + (item.precio * item.cantidad), 0), 0);
+  let totalPedidoActual = 0;
+
+  // Sumar los precios del pedido actual
+  pedidos[pedidos.length - 1].forEach(item => {
+    totalPedidoActual += item.precio * item.cantidad;
+  });
+
+  console.log("EL TOTAL A COBRAR ES 💵 💲" + totalPedidoActual);
 
   const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150);
-
-  console.log("EL TOTAL A COBRAR ES 💵 💲" + totalGeneral);
   console.log(`Su pedido es el número: ${numeroPedidoAleatorio}`);
 
   const pedidoRecuadro = document.createElement("div");
@@ -256,7 +257,7 @@ function imprimirMensajeFinal() {
   imprimirFacturaButton.innerText = "Imprimir Factura";
   imprimirFacturaButton.style.display = "block"; 
   imprimirFacturaButton.style.margin = "auto"; 
-  imprimirFacturaButton.addEventListener("click", imprimirFactura);
+  imprimirFacturaButton.addEventListener("click", () => imprimirFactura(totalPedidoActual));
   pedidoRecuadro.appendChild(imprimirFacturaButton);
 
   document.body.appendChild(pedidoRecuadro);
@@ -268,7 +269,7 @@ function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function imprimirFactura() {
+function imprimirFactura(totalPedidoActual) {
   const facturaWindow = window.open('', '_blank');
   facturaWindow.document.write('<html><head><title>Factura</title></head><body>');
   facturaWindow.document.write('<h1 style="text-align: center; font-weight: bold;">FACTURA</h1>');
@@ -285,7 +286,7 @@ function imprimirFactura() {
   });
 
   facturaWindow.document.write('</ul>');
-  facturaWindow.document.write(`<p style="text-align: center; font-weight: bold;">Total a Pagar:$ ${totalGeneral}</p>`);
+  facturaWindow.document.write(`<p style="text-align: center; font-weight: bold;">Total a Pagar:$ ${totalPedidoActual}</p>`);
   facturaWindow.document.write('<p style="text-align: center;">Gracias por su compra!!</p>');
   facturaWindow.document.write('</body></html>');
   facturaWindow.document.close();
