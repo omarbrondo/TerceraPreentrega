@@ -119,38 +119,71 @@ function obtenerComida(nombre) {
 
 function crearFormularioComida(comida) {
   const formComida = document.createElement('form');
+  formComida.style.display = 'flex';
+  formComida.style.flexDirection = 'column';
+  formComida.style.alignItems = 'center'; // Centrar elementos horizontalmente
+  formComida.style.textAlign = 'center'; // Centrar el texto dentro del formulario
+
   comida.forEach(item => {
     const container = document.createElement('div');
-    const label = document.createElement('label');
-    label.innerText = `${item.nombre}: `;
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'center'; // Centrar elementos horizontalmente
+
+    const labelNombre = document.createElement('label');
+    labelNombre.innerText = `${item.nombre}: `;
+    labelNombre.style.marginBottom = '5px';
+
     const img = document.createElement('img');
     img.src = item.imagen;
     img.alt = item.nombre;
-    img.width = 100; 
-    label.appendChild(document.createElement('br')); 
-    label.appendChild(img);
-    container.appendChild(label);
-    container.appendChild(document.createElement('br')); 
-    const select = document.createElement('select');
-    select.name = item.nombre;
-    for (let i = 0; i <= 10; i++) {
-      const option = document.createElement('option');
-      option.value = i;
-      option.textContent = i;
-      select.appendChild(option);
-    }
-    container.appendChild(select);
+    img.width = 100;
+    img.style.marginBottom = '5px';
+
+    container.appendChild(labelNombre);
+    container.appendChild(img);
+
+    const quantityContainer = document.createElement('div');
+    quantityContainer.style.display = 'flex';
+    quantityContainer.style.alignItems = 'center';
+
+    const decreaseButton = document.createElement('button');
+    decreaseButton.type = 'button';
+    decreaseButton.innerText = '-';
+    decreaseButton.classList.add('decrease-button');
+    decreaseButton.style.marginRight = '5px';
+
+    const quantityInput = document.createElement('input');
+    quantityInput.type = 'text';
+    quantityInput.value = 0;
+    quantityInput.name = item.nombre;
+    quantityInput.classList.add('cantidad-input');
+    quantityInput.style.width = '50px';
+    quantityInput.style.marginRight = '5px';
+
+    const increaseButton = document.createElement('button');
+    increaseButton.type = 'button';
+    increaseButton.innerText = '+';
+    increaseButton.classList.add('increase-button');
+
+    quantityContainer.appendChild(decreaseButton);
+    quantityContainer.appendChild(quantityInput);
+    quantityContainer.appendChild(increaseButton);
+
+    container.appendChild(quantityContainer);
     formComida.appendChild(container);
-    formComida.appendChild(document.createElement('br')); 
+    formComida.appendChild(document.createElement('br'));
   });
+
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Enviar';
   formComida.appendChild(submitButton);
+
   document.body.appendChild(formComida);
+
   return formComida;
 }
-
 function obtenerBebida(nombre, mayorEdad) {
   return new Promise((resolve, reject) => {
     fetch('datos.json')
@@ -188,41 +221,87 @@ function obtenerBebida(nombre, mayorEdad) {
 
 function crearFormularioBebida(bebidas, mayorEdad) {
   const formBebida = document.createElement('form');
+  formBebida.style.display = 'flex';
+  formBebida.style.flexDirection = 'column';
+  formBebida.style.alignItems = 'center'; // Centrar elementos horizontalmente
+  formBebida.style.textAlign = 'center'; // Centrar el texto dentro del formulario
+
   bebidas.forEach(bebida => {
     const container = document.createElement('div');
-    const label = document.createElement('label');
-    label.innerText = `${bebida.nombre}: `;
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.alignItems = 'center'; // Centrar elementos horizontalmente
+
+    const labelNombre = document.createElement('label');
+    labelNombre.innerText = `${bebida.nombre}: `;
+    labelNombre.style.marginBottom = '5px';
+
     const img = document.createElement('img');
     img.src = bebida.imagen;
     img.alt = bebida.nombre;
-    img.width = 100; 
-    label.appendChild(document.createElement('br')); 
-    label.appendChild(img);
-    container.appendChild(label);
-    container.appendChild(document.createElement('br')); 
-    const select = document.createElement('select');
-    select.name = bebida.nombre;
-    for (let i = 0; i <= 10; i++) {
-      const option = document.createElement('option');
-      option.value = i;
-      option.textContent = i;
-      select.appendChild(option);
-    }
-    if (!mayorEdad && bebida.nombre === "Cerveza") {
-      select.disabled = true;
-    }
-    container.appendChild(select);
+    img.width = 100;
+    img.style.marginBottom = '5px';
+
+    container.appendChild(labelNombre);
+    container.appendChild(img);
+
+    const quantityContainer = document.createElement('div');
+    quantityContainer.style.display = 'flex';
+    quantityContainer.style.alignItems = 'center';
+
+    const quantityInput = document.createElement('input');
+    quantityInput.type = 'text';
+    quantityInput.value = 0;
+    quantityInput.name = bebida.nombre;
+    quantityInput.classList.add('cantidad-input');
+    quantityInput.style.width = '50px';
+    quantityInput.style.marginRight = '5px';
+
+    const decreaseButton = document.createElement('button');
+    decreaseButton.type = 'button';
+    decreaseButton.innerText = '-';
+    decreaseButton.classList.add('decrease-button');
+    decreaseButton.style.marginRight = '5px';
+
+    const increaseButton = document.createElement('button');
+    increaseButton.type = 'button';
+    increaseButton.innerText = '+';
+    increaseButton.classList.add('increase-button');
+
+    quantityContainer.appendChild(decreaseButton);
+    quantityContainer.appendChild(quantityInput);
+    quantityContainer.appendChild(increaseButton);
+
+    container.appendChild(quantityContainer);
     formBebida.appendChild(container);
-    formBebida.appendChild(document.createElement('br')); 
+    formBebida.appendChild(document.createElement('br'));
   });
+
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.innerText = 'Enviar';
   formBebida.appendChild(submitButton);
+
   document.body.appendChild(formBebida);
+
   return formBebida;
 }
-
+document.addEventListener('click', function(event) {
+  const target = event.target;
+  if (target.classList.contains('increase-button') || target.classList.contains('decrease-button')) {
+    const inputElement = target.parentNode.querySelector('.cantidad-input');
+    const currentValue = parseInt(inputElement.value);
+    if (!isNaN(currentValue)) {
+      if (target.classList.contains('increase-button')) {
+        inputElement.value = currentValue + 1;
+      } else if (target.classList.contains('decrease-button')) {
+        if (currentValue > 0) {
+          inputElement.value = currentValue - 1;
+        }
+      }
+    }
+  }
+});
 function imprimirSubtotal({ nombre, tipo, pedido }) {
   let subtotal = 0;
 
