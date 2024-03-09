@@ -380,25 +380,44 @@ function generarNumeroAleatorio(min, max) {
 
 function imprimirFactura(totalPedidoActual) {
   const facturaWindow = window.open('', '_blank');
-  facturaWindow.document.write('<html><head><title>Factura</title></head><body>');
-  facturaWindow.document.write('<h1 style="text-align: center; font-weight: bold;">FACTURA</h1>');
-  facturaWindow.document.write('<p style="text-align: center;">Restaurante Ratatouille</p>');
+  facturaWindow.document.write('<html><head><title>Factura</title>');
+  facturaWindow.document.write('<style>');
+  facturaWindow.document.write('body { font-family: Arial, sans-serif; }');
+  facturaWindow.document.write('.container { max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; }');
+  facturaWindow.document.write('h1, h2, p { text-align: center; }');
+  facturaWindow.document.write('ul { list-style-type: none; padding: 0; }');
+  facturaWindow.document.write('ul li { margin-bottom: 10px; }');
+  facturaWindow.document.write('hr { margin: 20px 0; }');
+  facturaWindow.document.write('.logo { text-align: center; }');
+  facturaWindow.document.write('.logo img { max-width: 60px; }'); // Reducir el tamaño máximo de la imagen del restaurante
+  facturaWindow.document.write('</style>');
+  facturaWindow.document.write('</head><body>');
+  
+  // Conservar el div con los pedidos anteriores
+  const divPedidosAnteriores = document.querySelector('div#pedidos-anteriores');
+  if (divPedidosAnteriores) {
+    facturaWindow.document.write(divPedidosAnteriores.outerHTML);
+  }
+  
+  facturaWindow.document.write('<div class="container">');
+  facturaWindow.document.write('<div class="logo"><img src="img/OIG.jpg" alt="Restaurante Ratatouille"></div>');
+  facturaWindow.document.write('<h1>FACTURA</h1>');
+  facturaWindow.document.write('<p>Restaurante Ratatouille</p>');
   facturaWindow.document.write('<hr>');
   facturaWindow.document.write('<h2>Detalles del pedido:</h2>');
   facturaWindow.document.write('<ul>');
-  facturaWindow.document.write('</ul>');
   const carritoItems = document.querySelectorAll('#lista-carrito li');
-  facturaWindow.document.write('<ul>');
   carritoItems.forEach(item => {
     facturaWindow.document.write(`<li>${item.innerText}</li>`);
   });
   facturaWindow.document.write('</ul>');
-  facturaWindow.document.write(`<p style="text-align: center; font-weight: bold;">Subtotal: $${subtotal.toFixed(2)}</p>`);
-  
+  facturaWindow.document.write(`<p style="font-weight: bold;">Subtotal: $${subtotal.toFixed(2)}</p>`);
   facturaWindow.document.write('<p style="text-align: center;">Gracias por su compra!!</p>');
+  facturaWindow.document.write('</div>'); // Cierre del contenedor principal
   facturaWindow.document.write('</body></html>');
   facturaWindow.document.close();
 }
+
 
 
 botonPedido.addEventListener("click", async function () {
@@ -449,7 +468,7 @@ botonPedido.addEventListener("click", async function () {
 
     }
 
-    
+    // Agregar los pedidos de todos los comensales a la matriz principal de pedidos
     pedidos.push(...pedidosPorComensal);
 
     imprimirMensajeFinal();
