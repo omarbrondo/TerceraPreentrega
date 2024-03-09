@@ -1,3 +1,17 @@
+let subtotal = 0;
+let totalPedidoActual = 0;
+
+function agregarAlCarrito(itemNombre, cantidad, precio, tipo) {
+  const carrito = document.getElementById('lista-carrito');
+  const subtotalCarrito = document.getElementById('subtotal-carrito');
+  const nuevoItem = document.createElement('li');
+  nuevoItem.innerHTML = `${cantidad} ${itemNombre} - Precio: $${precio * cantidad}`;
+  carrito.appendChild(nuevoItem);
+
+  // Actualizar el subtotal en el carrito de compras
+  subtotal += precio * cantidad;
+  subtotalCarrito.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
+}
 
 function mostrarNotificacion(mensaje) {
   Toastify({
@@ -59,8 +73,6 @@ function mostrarPedidosAnteriores() {
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
  // Llamar a la función para mostrar los pedidos anteriores
 
-swal("INSTRUCCIONES", "ANTES DE HACER CLIC EN EL BOTON VERDE, ABRIR LA CONSOLA", "warning");
-
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
     const nombreInput = document.createElement('input');
@@ -84,7 +96,7 @@ function obtenerInformacionCliente(i) {
         return; // Detener el proceso si el nombre está vacío
       }
       document.body.removeChild(form);
-      console.log(`Menu para ${nombre.toUpperCase()}`);
+
       resolve({ nombre, mayorEdad: true });
     });
 
@@ -96,7 +108,7 @@ function obtenerInformacionCliente(i) {
         return; // Detener el proceso si el nombre está vacío
       }
       document.body.removeChild(form);
-      console.log(`Menu para ${nombre.toUpperCase()}`);
+
       resolve({ nombre, mayorEdad: false });
     });
   });
@@ -109,7 +121,7 @@ function obtenerComida(nombre) {
       .then(data => {
         const comida = data.comida.map(item => ({
           nombre: item.nombre,
-          precio: parseFloat(item.precio), // Convertir el precio a número
+          precio: parseFloat(item.precio),
           imagen: item.imagen
         }));
         const formComida = crearFormularioComida(comida);
@@ -120,6 +132,7 @@ function obtenerComida(nombre) {
             const cantidad = parseInt(formComida.elements[item.nombre].value);
             if (cantidad > 0) {
               pedidoComida.push(new Pedido(item.nombre, item.precio, cantidad, "Comida"));
+              agregarAlCarrito(item.nombre, cantidad, item.precio, "Comida");
             }
           });
           resolve({ tipo: "Comida", pedido: pedidoComida });
@@ -206,7 +219,7 @@ function obtenerBebida(nombre, mayorEdad) {
       .then(data => {
         const bebidas = data.bebida.map(item => ({
           nombre: item.nombre,
-          precio: parseFloat(item.precio), // Convertir el precio a número
+          precio: parseFloat(item.precio),
           imagen: item.imagen
         }));
         const formBebida = crearFormularioBebida(bebidas, mayorEdad);
@@ -214,7 +227,7 @@ function obtenerBebida(nombre, mayorEdad) {
           event.preventDefault();
           const cantidadCerveza = parseInt(formBebida.elements['Cerveza'].value);
           if (!mayorEdad && cantidadCerveza > 0) {
-            swal("oh oh","Lo siento, no puedes elegir cerveza porque eres menor de 18 años.","info");
+            swal("oh oh", "Lo siento, no puedes elegir cerveza porque eres menor de 18 años.", "info");
             return;
           }
           const pedidoBebida = [];
@@ -222,6 +235,7 @@ function obtenerBebida(nombre, mayorEdad) {
             const cantidad = parseInt(formBebida.elements[bebida.nombre].value);
             if (cantidad > 0) {
               pedidoBebida.push(new Pedido(bebida.nombre, bebida.precio, cantidad, 'Bebida'));
+              agregarAlCarrito(bebida.nombre, cantidad, bebida.precio, 'Bebida');
             }
           });
           resolve({ tipo: 'Bebida', pedido: pedidoBebida });
@@ -233,6 +247,7 @@ function obtenerBebida(nombre, mayorEdad) {
       });
   });
 }
+
 
 function crearFormularioBebida(bebidas, mayorEdad) {
   const formBebida = document.createElement('form');
@@ -318,15 +333,15 @@ document.addEventListener('click', function(event) {
   }
 });
 function imprimirSubtotal({ nombre, tipo, pedido }) {
-  let subtotal = 0;
+  
 
   if (Array.isArray(pedido)) {
-    subtotal = pedido.reduce((total, item) => total + (item.precio * item.cantidad), 0);
+    subtotal = pedido.reduce((total, item) => subtotal + (item.precio * item.cantidad), 0);
   } else {
     subtotal = pedido.precio * pedido.cantidad;
   }
 
-  console.log(`💰Subtotal de ${tipo} para ${nombre.toUpperCase()}: ${subtotal}`);
+
 }
 
 function imprimirMensajeFinal() {
@@ -335,17 +350,19 @@ function imprimirMensajeFinal() {
   botonPedido.style.display = "none"; 
   document.querySelector("h1").innerText = "Su pedido está preparándose!"; 
 
-  let totalPedidoActual = 0;
+  // Obtener los pedidos del último cliente
+  const pedidosClienteActual = pedidos[pedidos.length - 1];
 
-  // Sumar los precios del pedido actual
-  pedidos[pedidos.length - 1].forEach(item => {
+  // Sumar los precios de los pedidos del último cliente
+  
+  pedidosClienteActual.forEach(item => {
     totalPedidoActual += item.precio * item.cantidad;
   });
 
-  console.log("EL TOTAL A COBRAR ES 💵 💲" + totalPedidoActual);
+ 
 
   const numeroPedidoAleatorio = generarNumeroAleatorio(10, 150);
-  console.log(`Su pedido es el número: ${numeroPedidoAleatorio}`);
+ 
 
   const pedidoRecuadro = document.createElement("div");
   pedidoRecuadro.style.backgroundColor = "white";
@@ -367,6 +384,12 @@ function imprimirMensajeFinal() {
   localStorage.setItem('pedidos', JSON.stringify(pedidos));
 }
 
+
+
+
+
+
+
 function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -380,11 +403,11 @@ function imprimirFactura(totalPedidoActual) {
   facturaWindow.document.write('<h2>Detalles del pedido:</h2>');
   facturaWindow.document.write('<ul>');
 
-  // Obtener el último pedido almacenado en la variable pedidos
-  const ultimoPedido = pedidos[pedidos.length - 1];
-
-  ultimoPedido.forEach((item, index) => {
-    facturaWindow.document.write(`<li>${item.tipo} ${index + 1}: ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
+  // Iterar sobre todos los pedidos actuales
+  pedidos.forEach((pedido, index) => {
+    pedido.forEach(item => {
+      facturaWindow.document.write(`<li>Pedido ${index + 1}: ${item.tipo} - ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
+    });
   });
 
   facturaWindow.document.write('</ul>');
@@ -397,7 +420,7 @@ function imprimirFactura(totalPedidoActual) {
 botonPedido.addEventListener("click", async function () {
   botonPedido.style.display = "none";
   imagenPrincipal.style.display = "none";
-  console.log("⚠️ATENCIÓN COCINEROS! HAY UN NUEVO CLIENTE!⚠️");
+
   
   const comensalesInput = document.createElement('select'); 
   comensalesInput.placeholder = '¿Cuántas personas son?';
@@ -417,32 +440,34 @@ botonPedido.addEventListener("click", async function () {
     const personas = parseInt(comensalesInput.value);
     form.style.display = "none";
 
+    // Inicializar una matriz de pedidos vacía para cada comensal
+    const pedidosPorComensal = [];
+
     for (let i = 0; i < personas; i++) {
       const { nombre, mayorEdad } = await obtenerInformacionCliente(i);
 
       const pedidoComida = await obtenerComida(nombre);
       const pedidoBebida = await obtenerBebida(nombre, mayorEdad);
 
+      // Agregar los pedidos del comensal actual a su matriz de pedidos
+      pedidosPorComensal.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
 
       pedidoBebida.pedido.forEach(item => {
         mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
       });
       mostrarNotificacion(`${nombre.toUpperCase()} ha elegido la siguiente bebida:`);
 
-      
       pedidoComida.pedido.forEach(item => {
         mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
       });
       mostrarNotificacion(`${nombre.toUpperCase()} ha elegido la siguiente comida:`);
       
-      
-
-
       imprimirSubtotal({ nombre, ...pedidoComida });
       imprimirSubtotal({ nombre, ...pedidoBebida });
-
-      pedidos.push([...pedidoComida.pedido, ...pedidoBebida.pedido]);
     }
+
+    // Agregar los pedidos de todos los comensales a la matriz principal de pedidos
+    pedidos.push(...pedidosPorComensal);
 
     imprimirMensajeFinal();
     document.body.removeChild(form);

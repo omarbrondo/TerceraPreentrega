@@ -71,3 +71,27 @@ h3 {
     margin: 10px 0;
     display: block; 
   }
+
+  #carrito {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fff8dc;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  
+  #lista-carrito {
+    list-style: none;
+    padding: 0;
+  }
+  
+  #lista-carrito li {
+    padding: 5px;
+    border-bottom: 1px solid #ccc; /* Línea divisoria entre elementos del carrito */
+  }
+  
+  #subtotal-carrito {
+    font-weight: bold;
+    margin-top: 10px;
+  }
