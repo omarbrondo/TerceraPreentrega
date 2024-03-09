@@ -59,7 +59,7 @@ function mostrarPedidosAnteriores() {
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
  // Llamar a la función para mostrar los pedidos anteriores
 
-swal("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
+swal("INSTRUCCIONES", "ANTES DE HACER CLIC EN EL BOTON VERDE, ABRIR LA CONSOLA", "warning");
 
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
