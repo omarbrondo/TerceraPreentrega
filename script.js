@@ -5,11 +5,13 @@ function agregarAlCarrito(itemNombre, cantidad, precio, tipo) {
   const carrito = document.getElementById('lista-carrito');
   const subtotalCarrito = document.getElementById('subtotal-carrito');
   const nuevoItem = document.createElement('li');
-  nuevoItem.innerHTML = `${cantidad} ${itemNombre} - Precio: $${precio * cantidad}`;
+  nuevoItem.innerHTML = `${cantidad} ${itemNombre} - Precio $${precio * cantidad}`;
   carrito.appendChild(nuevoItem);
 
-  // Actualizar el subtotal en el carrito de compras
   subtotal += precio * cantidad;
+
+  console.log(subtotal);
+
   subtotalCarrito.innerText = `Subtotal: $${subtotal.toFixed(2)}`;
 }
 
@@ -333,15 +335,22 @@ document.addEventListener('click', function(event) {
   }
 });
 function imprimirSubtotal({ nombre, tipo, pedido }) {
-  
+  /*let subtotalComensal = 0; // Variable para almacenar el subtotal de cada comensal
 
   if (Array.isArray(pedido)) {
-    subtotal = pedido.reduce((total, item) => subtotal + (item.precio * item.cantidad), 0);
+    subtotalComensal = pedido.reduce((total, item) => total + (item.precio * item.cantidad), 0);
   } else {
-    subtotal = pedido.precio * pedido.cantidad;
+    subtotalComensal = pedido.precio * pedido.cantidad;
   }
 
 
+
+  // Actualizar el subtotal global sumando el subtotal del comensal
+  subtotal += subtotalComensal;
+
+  // Mostrar el subtotal global en el carrito
+  const subtotalCarrito = document.getElementById('subtotal-carrito');
+  subtotalCarrito.innerText = `Subtotal: $${subtotal.toFixed(2)}`;*/
 }
 
 function imprimirMensajeFinal() {
@@ -383,12 +392,6 @@ function imprimirMensajeFinal() {
 
   localStorage.setItem('pedidos', JSON.stringify(pedidos));
 }
-
-
-
-
-
-
 
 function generarNumeroAleatorio(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
