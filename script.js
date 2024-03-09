@@ -45,8 +45,7 @@ let botonPedido = document.querySelector("button");
 let imagenPrincipal = document.querySelector("img");
 let pedidos = obtenerPedidosLocalStorage(); // Obtener los pedidos almacenados en localStorage
 
-// Función para mostrar los pedidos anteriores en el div
-// Función para mostrar los pedidos anteriores en el div
+
 function mostrarPedidosAnteriores() {
   const divPedidosAnteriores = document.createElement('div');
   divPedidosAnteriores.style.backgroundColor = 'green';
@@ -55,9 +54,9 @@ function mostrarPedidosAnteriores() {
   divPedidosAnteriores.style.position = 'absolute';
   divPedidosAnteriores.style.left = '10px';
   divPedidosAnteriores.style.top = '10px';
-  divPedidosAnteriores.style.maxWidth = '200px'; // Establecemos un ancho máximo
-  divPedidosAnteriores.style.maxHeight = '300px'; // Establecemos una altura máxima
-  divPedidosAnteriores.style.overflow = 'auto'; // Activamos las barras de desplazamiento en caso de que el contenido exceda la altura máxima
+  divPedidosAnteriores.style.maxWidth = '200px'; 
+  divPedidosAnteriores.style.maxHeight = '300px'; 
+  divPedidosAnteriores.style.overflow = 'auto'; 
 
   const titulo = document.createElement('h2');
   titulo.innerText = 'Pedidos Anteriores';
@@ -72,8 +71,8 @@ function mostrarPedidosAnteriores() {
   document.body.insertBefore(divPedidosAnteriores, document.querySelector('footer'));
 }
 
-mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
- // Llamar a la función para mostrar los pedidos anteriores
+mostrarPedidosAnteriores(); 
+
 
 function obtenerInformacionCliente(i) {
   return new Promise((resolve, reject) => {
@@ -107,7 +106,7 @@ function obtenerInformacionCliente(i) {
       const nombre = nombreInput.value.trim();
       if (nombre === '') {
         swal("Oops...", "No seas tímido, decinos tu nombre", "warning");
-        return; // Detener el proceso si el nombre está vacío
+        return; 
       }
       document.body.removeChild(form);
 
@@ -151,14 +150,13 @@ function crearFormularioComida(comida) {
   const formComida = document.createElement('form');
   formComida.style.display = 'flex';
   formComida.style.flexDirection = 'column';
-  formComida.style.alignItems = 'center'; // Centrar elementos horizontalmente
-  formComida.style.textAlign = 'center'; // Centrar el texto dentro del formulario
+  formComida.style.alignItems = 'center'; 
 
   comida.forEach(item => {
     const container = document.createElement('div');
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.alignItems = 'center'; // Centrar elementos horizontalmente
+    container.style.alignItems = 'center'; 
 
     const labelNombre = document.createElement('label');
     labelNombre.innerText = `${item.nombre}: `;
@@ -255,14 +253,14 @@ function crearFormularioBebida(bebidas, mayorEdad) {
   const formBebida = document.createElement('form');
   formBebida.style.display = 'flex';
   formBebida.style.flexDirection = 'column';
-  formBebida.style.alignItems = 'center'; // Centrar elementos horizontalmente
-  formBebida.style.textAlign = 'center'; // Centrar el texto dentro del formulario
+  formBebida.style.alignItems = 'center'; 
+  formBebida.style.textAlign = 'center'; 
 
   bebidas.forEach(bebida => {
     const container = document.createElement('div');
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.alignItems = 'center'; // Centrar elementos horizontalmente
+    container.style.alignItems = 'center'; 
 
     const labelNombre = document.createElement('label');
     labelNombre.innerText = `${bebida.nombre}: `;
@@ -334,24 +332,7 @@ document.addEventListener('click', function(event) {
     }
   }
 });
-function imprimirSubtotal({ nombre, tipo, pedido }) {
-  /*let subtotalComensal = 0; // Variable para almacenar el subtotal de cada comensal
 
-  if (Array.isArray(pedido)) {
-    subtotalComensal = pedido.reduce((total, item) => total + (item.precio * item.cantidad), 0);
-  } else {
-    subtotalComensal = pedido.precio * pedido.cantidad;
-  }
-
-
-
-  // Actualizar el subtotal global sumando el subtotal del comensal
-  subtotal += subtotalComensal;
-
-  // Mostrar el subtotal global en el carrito
-  const subtotalCarrito = document.getElementById('subtotal-carrito');
-  subtotalCarrito.innerText = `Subtotal: $${subtotal.toFixed(2)}`;*/
-}
 
 function imprimirMensajeFinal() {
   imagenPrincipal.src = "img/OIG (1).jpg"; 
@@ -477,11 +458,10 @@ botonPedido.addEventListener("click", async function () {
       });
       mostrarNotificacion(`${nombre.toUpperCase()} ha elegido la siguiente comida:`);
       
-      imprimirSubtotal({ nombre, ...pedidoComida });
-      imprimirSubtotal({ nombre, ...pedidoBebida });
+
     }
 
-    // Agregar los pedidos de todos los comensales a la matriz principal de pedidos
+    
     pedidos.push(...pedidosPorComensal);
 
     imprimirMensajeFinal();
