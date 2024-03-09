@@ -4,7 +4,7 @@ function mostrarNotificacion(mensaje) {
     text: mensaje,
     duration: 3000,
     gravity: "top",
-    backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+    background: "linear-gradient(to right, #00b09b, #96c93d)",
     stopOnFocus: true,
   }).showToast();
 }
@@ -30,6 +30,7 @@ let imagenPrincipal = document.querySelector("img");
 let pedidos = obtenerPedidosLocalStorage(); // Obtener los pedidos almacenados en localStorage
 
 // Función para mostrar los pedidos anteriores en el div
+// Función para mostrar los pedidos anteriores en el div
 function mostrarPedidosAnteriores() {
   const divPedidosAnteriores = document.createElement('div');
   divPedidosAnteriores.style.backgroundColor = 'green';
@@ -39,6 +40,8 @@ function mostrarPedidosAnteriores() {
   divPedidosAnteriores.style.left = '10px';
   divPedidosAnteriores.style.top = '10px';
   divPedidosAnteriores.style.maxWidth = '200px'; // Establecemos un ancho máximo
+  divPedidosAnteriores.style.maxHeight = '300px'; // Establecemos una altura máxima
+  divPedidosAnteriores.style.overflow = 'auto'; // Activamos las barras de desplazamiento en caso de que el contenido exceda la altura máxima
 
   const titulo = document.createElement('h2');
   titulo.innerText = 'Pedidos Anteriores';
@@ -54,6 +57,7 @@ function mostrarPedidosAnteriores() {
 }
 
 mostrarPedidosAnteriores(); // Llamar a la función para mostrar los pedidos anteriores
+ // Llamar a la función para mostrar los pedidos anteriores
 
 swal("⚠️INSTRUCCIONES⚠️\n ANTES DE HACER CLIC EN EL BOTON NARANJA, ABRIR LA CONSOLA");
 
@@ -423,13 +427,13 @@ botonPedido.addEventListener("click", async function () {
       pedidoBebida.pedido.forEach(item => {
         mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
       });
-      mostrarNotificacion(`${nombre} ha elegido la siguiente bebida:`);
+      mostrarNotificacion(`${nombre.toUpperCase()} ha elegido la siguiente bebida:`);
 
       
       pedidoComida.pedido.forEach(item => {
         mostrarNotificacion(`${item.cantidad} ${item.item} - Precio: $${item.precio * item.cantidad}`);
       });
-      mostrarNotificacion(`${nombre} ha elegido la siguiente comida:`);
+      mostrarNotificacion(`${nombre.toUpperCase()} ha elegido la siguiente comida:`);
       
       
 
