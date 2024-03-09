@@ -386,27 +386,15 @@ function imprimirFactura(totalPedidoActual) {
   facturaWindow.document.write('<hr>');
   facturaWindow.document.write('<h2>Detalles del pedido:</h2>');
   facturaWindow.document.write('<ul>');
-
-  // Iterar sobre los pedidos anteriores
-  /*pedidos.forEach((pedido, index) => {
-    pedido.forEach(item => {
-      facturaWindow.document.write(`<li>Pedido ${index + 1}: ${item.tipo} - ${item.item} - Precio:$ ${item.precio} - Cantidad: ${item.cantidad}</li>`);
-    });
-  });*/
-
   facturaWindow.document.write('</ul>');
-
-  // Agregar los elementos del carrito de compras
   const carritoItems = document.querySelectorAll('#lista-carrito li');
   facturaWindow.document.write('<ul>');
   carritoItems.forEach(item => {
     facturaWindow.document.write(`<li>${item.innerText}</li>`);
   });
   facturaWindow.document.write('</ul>');
-
-  // Mostrar subtotal
   facturaWindow.document.write(`<p style="text-align: center; font-weight: bold;">Subtotal: $${subtotal.toFixed(2)}</p>`);
-
+  
   facturaWindow.document.write('<p style="text-align: center;">Gracias por su compra!!</p>');
   facturaWindow.document.write('</body></html>');
   facturaWindow.document.close();
